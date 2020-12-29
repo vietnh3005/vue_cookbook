@@ -1,74 +1,49 @@
 <template>
   <div id="app">
+    <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>
     <main>
-      <h1>Sample Vue.js SVG Icon System</h1>
-      <app-typography-icon />
-      <app-animated-icon />
+      <router-view/>
     </main>
   </div>
 </template>
 
-<script>
-import AppTypographyIcon from './components/AppTypographyIcon'
-import AppAnimatedIcon from './components/AppAnimatedIcon'
-export default {
-  components: {
-    AppTypographyIcon,
-    AppAnimatedIcon
-  }
-}
-</script>
-
 <style>
-body,
-html {
-  margin: 0;
-}
-#app {
-  font-family: 'Nunito', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #222;
-  font-weight: 300;
-  background: #f1efef;
-  width: 100vw;
-  height: 100vh;
-  font-size: 17px;
-}
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-weight: 800;
-  color: #5a5a5a;
-}
-main {
-  width: 800px;
-  margin: 0 auto;
-  display: table;
-}
-section {
-  padding: 20px;
-  margin-top: 10px;
-  background: #fff;
-  border: 1px solid #eee;
-}
-h2 {
-  margin-bottom: 0;
-}
-a,
-a:visited,
-a:hover {
-  color: #949090;
-  text-decoration: none;
-  font-weight: 700;
-}
-.info {
-  margin-top: 0;
-  font-family: 'Lato', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-style: italic;
-  color: #949090;
-}
+  @import url('https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css');
+
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  #nav {
+    background-color: #F5F5F5;
+    color: #555555;
+  }
+
+  #nav a {
+    color: #555555;
+    text-decoration: none;
+    display: inline-block;
+    padding: .5rem;
+  }
+
+  #nav a:hover {
+    text-decoration: underline;
+  }
+
+  .content-wrapper {
+    max-width: 840px;
+    margin: 42px auto;
+    padding: 21px;
+  }
+
+  a {
+    text-decoration: none;
+  }
 </style>
