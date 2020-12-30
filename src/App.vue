@@ -1,74 +1,57 @@
 <template>
-  <div id="app">
-    <main>
-      <h1>Sample Vue.js SVG Icon System</h1>
-      <app-typography-icon />
-      <app-animated-icon />
-    </main>
+  <div id='app'>
+      <div>
+        <h3>Let us test your arithmetic.</h3>
+        <p>What is the sum of the two numbers?</p>
+        <div class='inline'>
+          <p>{{ x1 }} + {{ x2 }} =</p> <input v-model='guess'> <button v-on:click='check'>Check Answer</button>
+        </div>
+        <button v-on:click='refresh'>Refresh</button>
+        <p>{{message}}</p>
+      </div>
   </div>
 </template>
 
 <script>
-import AppTypographyIcon from './components/AppTypographyIcon'
-import AppAnimatedIcon from './components/AppAnimatedIcon'
 export default {
-  components: {
-    AppTypographyIcon,
-    AppAnimatedIcon
+  name: 'App',
+  data() {
+    return {
+      x1: Math.ceil(Math.random() * 100),
+      x2: Math.ceil(Math.random() * 100),
+      guess: '',
+      message: ''
+    }
+  },
+  methods: {
+    check() {
+      if (this.x1 + this.x2 === parseInt(this.guess)) {
+        this.message = 'SUCCESS!'
+      } else {
+        this.message = 'TRY AGAIN'
+      }
+    },
+    refresh() {
+      this.x1 = Math.ceil(Math.random() * 100);
+      this.x2 = Math.ceil(Math.random() * 100);
+    }
   }
 }
 </script>
 
 <style>
-body,
-html {
-  margin: 0;
-}
 #app {
-  font-family: 'Nunito', sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #222;
-  font-weight: 300;
-  background: #f1efef;
-  width: 100vw;
-  height: 100vh;
-  font-size: 17px;
+  color: #2c3e50;
+  margin-top: 60px;
 }
-h1,
-h2,
-h3,
-h4,
-h5 {
-  font-weight: 800;
-  color: #5a5a5a;
+.inline * {
+  display: inline-block;
 }
-main {
-  width: 800px;
-  margin: 0 auto;
-  display: table;
-}
-section {
-  padding: 20px;
-  margin-top: 10px;
-  background: #fff;
-  border: 1px solid #eee;
-}
-h2 {
-  margin-bottom: 0;
-}
-a,
-a:visited,
-a:hover {
-  color: #949090;
-  text-decoration: none;
-  font-weight: 700;
-}
-.info {
-  margin-top: 0;
-  font-family: 'Lato', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-style: italic;
-  color: #949090;
+img {
+  height: 350px;
 }
 </style>
