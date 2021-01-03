@@ -1,21 +1,17 @@
 <template>
   <div id="app">
-    <h1>Random User</h1>
-    <div class="person" v-for="person in persons" v-bind:key="person">
-      <div class="left">
-        <img :src="person.picture.large" />
-      </div>
-      <div class="right">
-        <p>{{ person.name.first }} {{ person.name.last }}</p>
-        <ul>
-          <li><strong>Birthday:</strong> {{ person.dob }}</li>
-          <li class="text-capitalize">
-            <strong>Location:</strong> {{ person.location.city }},
-            {{ person.location.state }}
-          </li>
-        </ul>
-      </div>
+    <h2>Cats</h2>
+    <div v-for="(cat, n) in cats" v-bind:key="(cat, n)">
+      <p>
+        <span class="cat">{{ cat }}</span>
+        <button @click="removeCat(n)">Remove</button>
+      </p>
     </div>
+
+    <p>
+      <input v-model="newCat" />
+      <button @click="addCat">Add Cat</button>
+    </p>
   </div>
 </template>
 
@@ -25,36 +21,38 @@ export default {
   name: "app",
   data() {
     return {
-      persons: []
+      cats: [],
+      newCat: null
     };
   },
-  methods: {
-    getInitialUsers() {
-      for (var i = 0; i < 5; i++) {
-        axios.get(`https://randomuser.me/api/`).then(response => {
-          this.persons.push(response.data.results[0]);
-        });
+  mounted() {
+    if (localStorage.getItem("cats")) {
+      try {
+        this.cats = JSON.parse(localStorage.getItem("cats"));
+      } catch (e) {
+        localStorage.removeItem("cats");
       }
-    },
-    scroll(person) {
-      window.onscroll = () => {
-        let bottomOfWindow =
-          document.documentElement.scrollTop + window.innerHeight ===
-          document.documentElement.offsetHeight;
-
-        if (bottomOfWindow) {
-          axios.get(`https://randomuser.me/api/`).then(response => {
-            this.persons.push(response.data.results[0]);
-          });
-        }
-      };
     }
   },
-  beforeMount() {
-    this.getInitialUsers();
-  },
-  mounted() {
-    this.scroll(this.person);
+  methods: {
+    addCat() {
+      // ensure they actually typed something
+      if (!this.newCat) {
+        return;
+      }
+
+      this.cats.push(this.newCat);
+      this.newCat = "";
+      this.saveCats();
+    },
+    removeCat(x) {
+      this.cats.splice(x, 1);
+      this.saveCats();
+    },
+    saveCats() {
+      const parsed = JSON.stringify(this.cats);
+      localStorage.setItem("cats", parsed);
+    }
   }
 };
 </script>
