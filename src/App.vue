@@ -1,17 +1,25 @@
 <template>
   <div id="app">
-    <h2>Cats</h2>
-    <div v-for="(cat, n) in cats" v-bind:key="(cat, n)">
-      <p>
-        <span class="cat">{{ cat }}</span>
-        <button @click="removeCat(n)">Remove</button>
-      </p>
-    </div>
+    <h1>Bitcoin Price Index</h1>
 
-    <p>
-      <input v-model="newCat" />
-      <button @click="addCat">Add Cat</button>
-    </p>
+    <section v-if="errored">
+      <p>
+        We're sorry, we're not able to retrieve this information at the moment,
+        please try back later
+      </p>
+    </section>
+
+    <section v-else>
+      <div v-if="loading">Loading...</div>
+
+      <div v-else v-for="currency in info" v-bind:key="currency" class="currency">
+        {{ currency.description }}:
+        <span class="lighten">
+          <span v-html="currency.symbol"></span
+          >{{ currency.rate_float | currencydecimal }}
+        </span>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -21,38 +29,27 @@ export default {
   name: "app",
   data() {
     return {
-      cats: [],
-      newCat: null
+      info: null,
+      loading: true,
+      errored: false
     };
   },
-  mounted() {
-    if (localStorage.getItem("cats")) {
-      try {
-        this.cats = JSON.parse(localStorage.getItem("cats"));
-      } catch (e) {
-        localStorage.removeItem("cats");
-      }
+  filters: {
+    currencydecimal(value) {
+      return value.toFixed(2);
     }
   },
-  methods: {
-    addCat() {
-      // ensure they actually typed something
-      if (!this.newCat) {
-        return;
-      }
-
-      this.cats.push(this.newCat);
-      this.newCat = "";
-      this.saveCats();
-    },
-    removeCat(x) {
-      this.cats.splice(x, 1);
-      this.saveCats();
-    },
-    saveCats() {
-      const parsed = JSON.stringify(this.cats);
-      localStorage.setItem("cats", parsed);
-    }
+  mounted() {
+    axios
+      .get("https://api.coindesk.com/v1/bpi/currentprice.json")
+      .then(response => {
+        this.info = response.data.bpi;
+      })
+      .catch(error => {
+        console.log(error);
+        this.errored = true;
+      })
+      .finally(() => (this.loading = false));
   }
 };
 </script>
